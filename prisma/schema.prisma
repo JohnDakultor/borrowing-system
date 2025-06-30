@@ -18,24 +18,25 @@ model User {
   id       String   @id @default(uuid())
   name     String
   email    String   @unique
-  borrowed Borrow[]
+  password String 
 }
 
 model Item {
   id        String   @id @default(uuid())
   name      String
+  category  String
+  stock     Int      @default(0)
   available Boolean  @default(true)
   borrows   Borrow[]
 }
 
+
 model Borrow {
   id         String   @id @default(uuid())
-  userId     String
+  borrower   String   // <- Just store the name directly
   itemId     String
   borrowedAt DateTime @default(now())
   returnedAt DateTime?
 
-  user User @relation(fields: [userId], references: [id])
   item Item @relation(fields: [itemId], references: [id])
 }
-

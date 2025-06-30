@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Borrowly",
+  title: "Borrowing System",
   description: "A modern borrowing system to track and manage checkouts.",
 };
 
@@ -34,9 +34,9 @@ export default function RootLayout({
           <header className="w-full border-b bg-white/70 backdrop-blur-md shadow-sm">
             <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
               <h1 className="text-xl font-semibold tracking-tight">
-                Borrowly
+                Borrowing System
               </h1>
-              <nav className="space-x-4 text-sm font-medium">
+              {/* <nav className="space-x-4 text-sm font-medium">
                 <a href="/" className="hover:underline">
                   Home
                 </a>
@@ -46,7 +46,7 @@ export default function RootLayout({
                 <a href="#" className="hover:underline">
                   Contact
                 </a>
-              </nav>
+              </nav> */}
             </div>
           </header>
 

@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import {
   Dialog,
   DialogContent,
@@ -12,20 +14,38 @@ import { Label } from "@/components/ui/label";
 import { Card, CardContent } from "@/components/ui/card";
 
 export default function Home() {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const router = useRouter();
+
+  const handleLogin = async (e: React.FormEvent) => {
+    e.preventDefault();
+
+    const res = await fetch("/api/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(form),
+    });
+
+    if (res.ok) {
+      router.push("/dashboard");
+    } else {
+      const data = await res.json();
+      setError(data?.error || "Login failed");
+    }
+  };
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-center bg-gradient-to-br from-[#f8fafc] to-[#e2e8f0] px-6 py-16 text-center">
-      {/* Hero Section */}
       <div className="max-w-2xl w-full space-y-6 animate-fadeIn">
         <h1 className="text-5xl font-bold tracking-tight leading-tight text-gray-900">
-          Welcome to <span className="text-primary">Borrowly</span>
+          Welcome to <span className="text-primary">Borrowing System</span>
         </h1>
         <p className="text-muted-foreground text-lg">
           A modern borrowing system to manage and track item checkouts with ease.
         </p>
 
         <div className="flex flex-col sm:flex-row gap-4 justify-center">
-         
-
           <Dialog>
             <DialogTrigger asChild>
               <Button size="lg" className="shadow-lg">
@@ -37,7 +57,7 @@ export default function Home() {
                 Admin Login
               </DialogTitle>
 
-              <form className="space-y-4">
+              <form onSubmit={handleLogin} className="space-y-4">
                 <div className="space-y-2 text-left">
                   <Label htmlFor="email">Email</Label>
                   <Input
@@ -45,6 +65,11 @@ export default function Home() {
                     type="email"
                     placeholder="admin@example.com"
                     className="bg-white"
+                    value={form.email}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, email: e.target.value }))
+                    }
+                    required
                   />
                 </div>
                 <div className="space-y-2 text-left">
@@ -54,8 +79,18 @@ export default function Home() {
                     type="password"
                     placeholder="••••••••"
                     className="bg-white"
+                    value={form.password}
+                    onChange={(e) =>
+                      setForm((prev) => ({ ...prev, password: e.target.value }))
+                    }
+                    required
                   />
                 </div>
+
+                {error && (
+                  <p className="text-sm text-red-500 text-left">{error}</p>
+                )}
+
                 <Button type="submit" className="w-full">
                   Sign In
                 </Button>
@@ -65,7 +100,6 @@ export default function Home() {
         </div>
       </div>
 
-      {/* Feature Cards */}
       <section className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-20 max-w-5xl w-full px-4 animate-fadeUp">
         {[
           {
